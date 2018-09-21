@@ -16,6 +16,23 @@ from loginform.models import User
 from .forms import LoginForm,RegisterForm
 from django.contrib.auth.hashers import make_password
 
+class LogoutPage(FormView):
+    pass
+
+
+class LoginPage(FormView):
+    pass
+
+
+class SignUp(FormView):
+    template_name='signup.html'
+    def get(self, request, *args, **kwargs):
+        super(SignUp, self).get(request, args, kwargs)
+        context_data = self.get_context_data()
+        return self.render_to_response(self.get_context_data())
+
+
+
 
 def logout_page(request):
     if request.user.is_authenticated():
