@@ -16,11 +16,14 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from . import views
-
+app_name = 'loginform'
 urlpatterns = [
-    url(r'^$',views.signup),
-    url(r'^login/',views.login_page),
+    url(r'^SignUp',views.SignUp.as_view()),
+    url(r'^Login/',views.LoginPage.as_view()),
     url(r'^user/',views.logout_page),
+
+    url(r'^view/book-details/(?P<pk>[0-9]+)/',views.BookDetail.as_view(), name='book_detail'),
+    url(r'^homepage/',views.HomePage.as_view()),
     # url(r'^home/',views.homepage)
 
     # url(r'/your-name/', views.get_name)

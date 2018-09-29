@@ -10,6 +10,55 @@ from django.contrib.auth.models import (
 )
 
 
+class Book(models.Model):
+    book_author = models.CharField(max_length=70)
+    book_title = models.CharField(max_length=120)
+    book_isbn = models.IntegerField()
+    book_price = models.IntegerField()
+    book_edition = models.IntegerField()
+    book_pages = models.IntegerField()
+    book_format = models.CharField(max_length=35)
+    book_publisher = models.CharField(max_length=35)
+    book_pub_date = models.CharField(max_length=35)
+    book_excerpt = models.TextField()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None):
         """

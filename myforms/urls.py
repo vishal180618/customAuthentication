@@ -20,9 +20,9 @@ from myforms import view
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^signup/',include("loginform.urls")),
-    url(r'^logout/',include("loginform.urls")),
-    url(r'^home/',view.homepage),
+    url(r'^',include("loginform.urls")),
+    # url(r'^logout/',include("loginform.urls")),
+    url(r'^home/',view.homepage.as_view()),
 
 
 ]

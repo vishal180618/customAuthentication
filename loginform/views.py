@@ -1,37 +1,43 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.forms import forms, Form
-from django.http import HttpResponse
-from django.shortcuts import render
-
-# Create your views here.
-from django.shortcuts import render
 from django import http
 from django.contrib import auth
-from django.views import View
+from django.contrib.auth.hashers import make_password
+from django.http import HttpResponse, HttpResponseRedirect
+# Create your views here.
+from django.shortcuts import render
 from django.views.generic import FormView
 
 from loginform.models import User
-from .forms import LoginForm,RegisterForm
-from django.contrib.auth.hashers import make_password
+from .forms import LoginForm, RegisterForm
+from django.views.generic import TemplateView, DetailView, ListView
+from models import Book
 
 class LogoutPage(FormView):
     pass
 
 
 class LoginPage(FormView):
-    pass
+    template_name = 'login.html'
+    form_class = LoginForm
+    get_success_url = 'http://127.0.0.1:8000/home/'
+
+    def form_valid(self, form):
+        auth.login(self.request, form.user)
+        return HttpResponseRedirect('http://127.0.0.1:8000/home/')
 
 
 class SignUp(FormView):
-    template_name='signup.html'
-    def get(self, request, *args, **kwargs):
-        super(SignUp, self).get(request, args, kwargs)
-        context_data = self.get_context_data()
-        return self.render_to_response(self.get_context_data())
+    template_name = 'signup.html'
+    form_class = RegisterForm
 
-
+    def form_valid(self, form):
+        user_name = form.cleaned_data['email']
+        user_password = make_password(form.cleaned_data['password'])
+        user = User(email=user_name, password=user_password)
+        user.save()
+        return HttpResponse("you account has been created successfully --django")
 
 
 def logout_page(request):
@@ -40,6 +46,7 @@ def logout_page(request):
         return http.HttpResponse("you have successfuly logged out of the website")
     else:
         return http.HttpResponse("you are not logged in!!")
+
 
 def login_page(request):
 
@@ -56,25 +63,42 @@ def login_page(request):
     return render(request, 'login.html', {'form': form})
 
 
-def signup(request):
-    # if this is a POST request we need to process the form data
-    if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
-        form = RegisterForm(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
-            getemail = form.cleaned_data['email']
-            getPass = make_password(form.cleaned_data['password'], None, 'md5')
-            user = User(email=getemail, password=getPass)
-            user.save()
+# def signup(request):
+#     # if this is a POST request we need to process the form data
+#     if request.method == 'POST':
+#         # create a form instance and populate it with data from the request:
+#         form = RegisterForm(request.POST)
+#         # check whether it's valid:
+#         if form.is_valid():
+#             getemail = form.cleaned_data['email']
+#             getPass = make_password(form.cleaned_data['password'], None, 'md5')
+#             user = User(email=getemail, password=getPass)
+#             user.save()
+#
+#             # process the data in form.cleaned_data as required
+#             # ...
+#             # redirect to a new URL:
+#             return HttpResponse('Yayyy!!! your account is created successfully')
+#
+#     # if a GET (or any other method) we'll create a blank form
+#     else:
+#         form = RegisterForm()
+#
+#     return render(request, 'signup.html', {'form': form})
 
-            # process the data in form.cleaned_data as required
-            # ...
-            # redirect to a new URL:
-            return HttpResponse('Yayyy!!! your account is created successfully')
 
-    # if a GET (or any other method) we'll create a blank form
-    else:
-        form = RegisterForm()
+class HomePage(ListView):
+    # books = Book.objects.all()
+    template_name = 'loginform/home.html'
+    model = Book
 
-    return render(request, 'signup.html', {'form': form})
+
+
+class BookDetail(DetailView):
+    template_name = 'loginform/book_detail.html'
+    model = Book
+
+
+class ParseData():
+
+    pass
