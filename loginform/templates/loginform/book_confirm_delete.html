@@ -1,0 +1,4 @@
+<form action="{% url 'loginform:book_delete' book.id %}" method="POST">
+     {% csrf_token %}
+    <input type="submit" value="Delete This Book" />
+</form>

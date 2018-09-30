@@ -3,8 +3,25 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.forms import Form
 from loginform.models import User
+from models import Book
 
 from .models import User
+
+
+class BookForm(forms.ModelForm):
+    class Meta:
+        model = Book
+        fields = ['book_author',
+                  'book_title',
+                  'book_isbn',
+                  'book_price',
+                  'book_edition',
+                  'book_pages',
+                  'book_format',
+                  'book_publisher',
+                  'book_pub_date',
+                  'book_excerpt'
+                  ]
 
 
 class RegisterForm(forms.ModelForm):
@@ -58,6 +75,7 @@ class UserAdminChangeForm(forms.ModelForm):
         # This is done here, rather than on the field, because the
         # field does not have access to the initial value
         return self.initial["password"]
+
 
 class LoginForm(forms.Form):
     email=forms.EmailField(label="email")

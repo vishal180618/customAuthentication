@@ -7,11 +7,12 @@ from django.contrib.auth.hashers import make_password
 from django.http import HttpResponse, HttpResponseRedirect
 # Create your views here.
 from django.shortcuts import render
+from django.urls import reverse, reverse_lazy
 from django.views.generic import FormView
 
 from loginform.models import User
-from .forms import LoginForm, RegisterForm
-from django.views.generic import TemplateView, DetailView, ListView
+from .forms import LoginForm, RegisterForm, BookForm
+from django.views.generic import TemplateView, DetailView, ListView, CreateView, DeleteView, UpdateView
 from models import Book
 
 class LogoutPage(FormView):
@@ -88,10 +89,8 @@ def login_page(request):
 
 
 class HomePage(ListView):
-    # books = Book.objects.all()
     template_name = 'loginform/home.html'
     model = Book
-
 
 
 class BookDetail(DetailView):
@@ -99,6 +98,18 @@ class BookDetail(DetailView):
     model = Book
 
 
-class ParseData():
+class UpdateBookDetail(UpdateView):
+    form_class = BookForm
+    model = Book
+    success_url = reverse_lazy('loginform:book_list')
 
-    pass
+
+class DeleteBook(DeleteView):
+    model = Book
+    success_url = reverse_lazy('loginform:book_list')
+
+
+class AddBook(CreateView):
+    form_class = BookForm
+    template_name = 'loginform/addbook_form.html'
+    success_url = reverse_lazy('loginform:book_list')

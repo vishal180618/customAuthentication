@@ -7,3 +7,7 @@
 {% else %}
     <p>No books are available.</p>
 {% endif %}
+
+<form action="{% url 'loginform:book_create' %}">
+    <input type="submit" value="Add Book" />
+</form>
