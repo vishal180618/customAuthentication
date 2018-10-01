@@ -1,10 +1,13 @@
-
 {% if request.user.is_authenticated %}
     <p>hello</p>
     <p>welcome {{ request.user.email }}</p>
+
     <form action="{% url 'loginform:logout'  %}">
     <input type="submit" value="Log Me out" />
+    </form>
     <br>
+
+
     {% if book_list %}
         <ul>
             {% for book in book_list %}
@@ -16,11 +19,11 @@
     {% endif %}
 
     <form action="{% url 'loginform:book_create' %}">
-        <input type="submit" value="Add Book"/>
+        <input type="submit" value="Add this Book"/>
     </form>
 
 {% else %}
-    <a href="{% url 'loginform:signup' %}">please register before accessing this page</a>
+    please register to view this book
 {% endif %}
 
 

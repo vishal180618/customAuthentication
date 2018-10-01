@@ -2,8 +2,6 @@
 <html>
 <body>
 
-<h2>HTML Forms</h2>
-
 <form action="{% url 'loginform:book_create' %}" method="post">
     {% csrf_token %}
     {{ form.as_p }}

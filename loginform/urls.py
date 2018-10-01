@@ -22,10 +22,10 @@ urlpatterns = [
     url(r'Login/',views.LoginPage.as_view(), name='login'),
     url(r'logout/',views.logout_page, name='logout'),
     url(r'^book/', include([
-        url(r'^book/create/$', views.AddBook.as_view(), name='book_create'),
-        url(r'^book/delete/(?P<pk>[0-9]+)', views.DeleteBook.as_view(), name='book_delete'),
-        url(r'^book/update/(?P<pk>[0-9]+)', views.UpdateBookDetail.as_view(), name='book_update'),
-        url(r'^book/book-details/(?P<pk>[0-9]+)/', views.BookDetail.as_view(), name='book_detail'),
+        url(r'^create/$', views.AddBook.as_view(), name='book_create'),
+        url(r'^delete/(?P<pk>[0-9]+)', views.DeleteBook.as_view(), name='book_delete'),
+        url(r'^update/(?P<pk>[0-9]+)', views.UpdateBookDetail.as_view(), name='book_update'),
+        url(r'^book-details/(?P<pk>[0-9]+)/', views.BookDetail.as_view(), name='book_detail'),
     ])),
     url(r'^homepage/',views.HomePage.as_view(), name='book_list'),
 
