@@ -4,16 +4,17 @@ from __future__ import unicode_literals
 from django import http
 from django.contrib import auth
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpResponseRedirect
-# Create your views here.
 from django.shortcuts import render
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
+from django.views.generic import DetailView, ListView, CreateView, DeleteView, UpdateView
 from django.views.generic import FormView
 
 from loginform.models import User
-from .forms import LoginForm, RegisterForm, BookForm
-from django.views.generic import TemplateView, DetailView, ListView, CreateView, DeleteView, UpdateView
 from models import Book
+from .forms import LoginForm, RegisterForm, BookForm
+
 
 class LogoutPage(FormView):
     pass
@@ -26,7 +27,7 @@ class LoginPage(FormView):
 
     def form_valid(self, form):
         auth.login(self.request, form.user)
-        return HttpResponseRedirect('http://127.0.0.1:8000/home/')
+        return HttpResponseRedirect(reverse_lazy('loginform:book_list'))
 
 
 class SignUp(FormView):
@@ -64,52 +65,30 @@ def login_page(request):
     return render(request, 'login.html', {'form': form})
 
 
-# def signup(request):
-#     # if this is a POST request we need to process the form data
-#     if request.method == 'POST':
-#         # create a form instance and populate it with data from the request:
-#         form = RegisterForm(request.POST)
-#         # check whether it's valid:
-#         if form.is_valid():
-#             getemail = form.cleaned_data['email']
-#             getPass = make_password(form.cleaned_data['password'], None, 'md5')
-#             user = User(email=getemail, password=getPass)
-#             user.save()
-#
-#             # process the data in form.cleaned_data as required
-#             # ...
-#             # redirect to a new URL:
-#             return HttpResponse('Yayyy!!! your account is created successfully')
-#
-#     # if a GET (or any other method) we'll create a blank form
-#     else:
-#         form = RegisterForm()
-#
-#     return render(request, 'signup.html', {'form': form})
-
-
-class HomePage(ListView):
+class HomePage(LoginRequiredMixin, ListView):
+    login_url = '/Login/'
+    permission_denied_message = 'not allowed to view this page'
     template_name = 'loginform/home.html'
     model = Book
 
 
-class BookDetail(DetailView):
+class BookDetail(LoginRequiredMixin, DetailView):
     template_name = 'loginform/book_detail.html'
     model = Book
 
 
-class UpdateBookDetail(UpdateView):
+class UpdateBookDetail(LoginRequiredMixin, UpdateView):
     form_class = BookForm
     model = Book
     success_url = reverse_lazy('loginform:book_list')
 
 
-class DeleteBook(DeleteView):
+class DeleteBook(LoginRequiredMixin, DeleteView):
     model = Book
     success_url = reverse_lazy('loginform:book_list')
 
 
-class AddBook(CreateView):
+class AddBook(LoginRequiredMixin, CreateView):
     form_class = BookForm
     template_name = 'loginform/addbook_form.html'
     success_url = reverse_lazy('loginform:book_list')

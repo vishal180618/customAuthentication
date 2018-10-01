@@ -22,7 +22,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^',include("loginform.urls")),
     # url(r'^logout/',include("loginform.urls")),
-    url(r'^home/',view.homepage.as_view()),
+    # url(r'^home/',view.homepage.as_view()),
 
 
 ]

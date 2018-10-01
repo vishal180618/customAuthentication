@@ -1,13 +1,26 @@
-{% if book_list %}
-    <ul>
-    {% for book in book_list %}
-        <li><a href="{% url 'loginform:book_detail' book.id %}">{{ book.book_title}}</a></li>
-    {% endfor %}
-    </ul>
+
+{% if request.user.is_authenticated %}
+    <p>hello</p>
+    <p>welcome {{ request.user.email }}</p>
+    <form action="{% url 'loginform:logout'  %}">
+    <input type="submit" value="Log Me out" />
+    <br>
+    {% if book_list %}
+        <ul>
+            {% for book in book_list %}
+                <li><a href="{% url 'loginform:book_detail' book.id %}">{{ book.book_title }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No books are available.</p>
+    {% endif %}
+
+    <form action="{% url 'loginform:book_create' %}">
+        <input type="submit" value="Add Book"/>
+    </form>
+
 {% else %}
-    <p>No books are available.</p>
+    <a href="{% url 'loginform:signup' %}">please register before accessing this page</a>
 {% endif %}
 
-<form action="{% url 'loginform:book_create' %}">
-    <input type="submit" value="Add Book" />
-</form>
+

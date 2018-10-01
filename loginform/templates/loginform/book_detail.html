@@ -1,31 +1,43 @@
 <!DOCTYPE html>
 <head>
-    <title>{{ book.book_title }}</title>
+    {% if request.user.is_authenticated %}
 
-</head>
-<body>
-<h1> {{ book.id}}. {{book.book_title }}</h1>
-Author:<h3>{{book.book_author}}</h3>
-<br>
-{{ book.book_edition }}
-<br>
+        <p>hello</p>
+        <p>welcome {{ request.user.email }}</p>
+
+        <form action="{% url 'loginform:logout' %}">
+            <input type="submit" value="Log Me out"/></form>
+
+        <title>{{ book.book_title }}</title>
 
 
-{{ book.book_format }}
-<br>
+        </head>
+        <body>
+        <h1> {{ book.id }}. {{ book.book_title }}</h1>
+        Author:<h3>{{ book.book_author }}</h3>
+        <br>
+        {{ book.book_edition }}
+        <br>
 
-{{ book.book_pages }} pages
-<br>
 
-{{ book.book_excerpt }}
+        {{ book.book_format }}
+        <br>
 
-</body>
-</html>
+        {{ book.book_pages }} pages
+        <br>
 
-<form action="{% url 'loginform:book_delete' book.id %}">
-    <input type="submit" value="Delete This Book" />
-</form>
+        {{ book.book_excerpt }}
 
-<form action="{% url 'loginform:book_update' book.id %}">
-    <input type="submit" value="Edit this Book" />
-</form>
+        </body>
+        </html>
+
+        <form action="{% url 'loginform:book_delete' book.id %}">
+            <input type="submit" value="Delete This Book"/>
+        </form>
+
+        <form action="{% url 'loginform:book_update' book.id %}">
+            <input type="submit" value="Edit this Book"/>
+        </form>
+    {% else %}
+        please log in to view this page
+    {% endif %}

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <form action="{% url 'loginform:logout' book.id %}">
+    <input type="submit" value="Log Me out" />
+</form>
+</head>
+<body>
+{% if request.user.is_authenticated %}
+    <p>hello</p>
+    <p>welcome {{ request.user.email }}</p>
+    <p><a href="/logout/user">Logout</a></p>
+{% else %}
+    <p><a href="/signup/login/">Login</a></p>
+    <p><a href="/signup">Register</a></p>
+{% endif %}
+</body>
+</html>
