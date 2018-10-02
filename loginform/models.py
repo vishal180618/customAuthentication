@@ -6,8 +6,9 @@ from django.db import models
 # Create your models here.
 from django.db import models
 from django.contrib.auth.models import (
-    BaseUserManager, AbstractBaseUser
+    BaseUserManager, AbstractBaseUser, User
 )
+from myforms.settings import AUTH_USER_MODEL
 
 
 class Book(models.Model):
@@ -21,6 +22,7 @@ class Book(models.Model):
     book_publisher = models.CharField(max_length=35)
     book_pub_date = models.CharField(max_length=35)
     book_excerpt = models.TextField()
+    user = models.ForeignKey(AUTH_USER_MODEL)
 
 
 

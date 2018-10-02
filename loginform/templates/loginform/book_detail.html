@@ -31,11 +31,15 @@
         </body>
         </html>
 
-        <form action="{% url 'loginform:book_delete' book.id %}">
+        <form action="{% url 'loginform:book_delete' book.id %}" method="post">
+            {% csrf_token %}
+
             <input type="submit" value="Delete This Book"/>
         </form>
 
-        <form action="{% url 'loginform:book_update' book.id %}">
+        <form action="{% url 'loginform:book_update' book.id %}" >
+            {% csrf_token %}
+
             <input type="submit" value="Edit this Book"/>
         </form>
     {% else %}
