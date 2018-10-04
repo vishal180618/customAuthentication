@@ -6,13 +6,12 @@ from django.contrib import auth
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect, Http404
-from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView, CreateView, DeleteView, UpdateView, FormView
 
 from loginform.models import User
-from models import Book
-from .forms import LoginForm, RegisterForm, BookForm
+from loginform.models import Book
+from loginform.forms import LoginForm, RegisterForm, BookForm
 
 
 class LoginPage(FormView):
@@ -41,23 +40,25 @@ class SignUp(FormView):
 def logout_page(request):
     if request.user.is_authenticated():
         auth.logout(request)
-        return http.HttpResponse("you have successfuly logged out of the website")
-    else:
-        return http.HttpResponse("you are not logged in!!")
+        return HttpResponseRedirect(reverse_lazy('loginform:login'))
 
+    return http.HttpResponse("you are not logged in!!")
 
 class HomePage(LoginRequiredMixin, ListView):
     login_url = reverse_lazy('loginform:login')
     permission_denied_message = 'not allowed to view this page'
     template_name = 'loginform/home.html'
+
     def get_queryset(self):
         try:
             queryset = Book.objects.filter(user_id=self.request.user.id)
-        except :
+            print self.request.user.id
+            print self.request.user.email
+        except:
+            import ipdb;ipdb.set_trace()
             return HttpResponseRedirect(reverse_lazy('loginform:book_list'))
 
         return queryset
-
 
 
 class BookDetail(LoginRequiredMixin, DetailView):
@@ -65,10 +66,7 @@ class BookDetail(LoginRequiredMixin, DetailView):
     template_name = 'loginform/book_detail.html'
 
     def get_queryset(self):
-        if Book.objects.get(pk=self.kwargs.get('pk')).user_id != self.request.user.id:
-            raise Http404
-        else:
-            queryset = Book.objects.filter(pk=self.kwargs.get('pk'), user_id=self.request.user.id)
+        queryset = Book.objects.filter(pk=self.kwargs.get('pk'), user_id=self.request.user.id)
         return queryset
 
 
@@ -78,10 +76,7 @@ class UpdateBookDetail(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('loginform:book_list')
 
     def get_queryset(self):
-        if Book.objects.get(pk=self.kwargs.get('pk')).user_id != self.request.user.id:
-            raise Http404
-        else:
-            queryset = Book.objects.filter(pk=self.kwargs.get('pk'), user_id=self.request.user.id)
+        queryset = Book.objects.filter(pk=self.kwargs.get('pk'), user_id=self.request.user.id)
         return queryset
 
 
@@ -90,10 +85,8 @@ class DeleteBook(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('loginform:book_list')
 
     def get_queryset(self):
-        if Book.objects.get(pk=self.kwargs.get('pk')).user_id != self.request.user.id:
-            raise Http404
-        else:
-            queryset = Book.objects.filter(pk=self.kwargs.get('pk'), user_id=self.request.user.id)
+
+        queryset = Book.objects.filter(pk=self.kwargs.get('pk'), user_id=self.request.user.id)
         return queryset
 
 
@@ -103,6 +96,3 @@ class AddBook(LoginRequiredMixin, CreateView):
     template_name = 'loginform/addbook_form.html'
     success_url = reverse_lazy('loginform:book_list')
 
-    def form_valid(self, form):
-        form.user = self.request.user
-        return super(AddBook, self).form_valid(form)

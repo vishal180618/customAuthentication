@@ -3,10 +3,10 @@
     {% if request.user.is_authenticated %}
 
         <p>hello</p>
-        <p>welcome {{ request.user.email }}</p>
+        <p style="color:blue" >welcome {{ request.user.email }}</p>
 
         <form action="{% url 'loginform:logout' %}">
-            <input type="submit" value="Log Me out"/></form>
+            <input style="color:red" type="submit" value="Log Me out"/></form>
 
         <title>{{ book.book_title }}</title>
 
@@ -34,13 +34,13 @@
         <form action="{% url 'loginform:book_delete' book.id %}" method="post">
             {% csrf_token %}
 
-            <input type="submit" value="Delete This Book"/>
+            <input style="color:red" type="submit" value="Delete This Book"/>
         </form>
 
         <form action="{% url 'loginform:book_update' book.id %}" >
             {% csrf_token %}
 
-            <input type="submit" value="Edit this Book"/>
+            <input style="color:green" type="submit" value="Edit this Book"/>
         </form>
     {% else %}
         please log in to view this page
