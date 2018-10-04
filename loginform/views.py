@@ -96,3 +96,8 @@ class AddBook(LoginRequiredMixin, CreateView):
     template_name = 'loginform/addbook_form.html'
     success_url = reverse_lazy('loginform:book_list')
 
+    def form_valid(self, form):
+        temp_form = form.save(commit=False)
+        temp_form.user = self.request.user
+        self.object = temp_form.save()
+        return super(AddBook, self).form_valid(form)
